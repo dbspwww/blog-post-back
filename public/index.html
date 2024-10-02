@@ -1,0 +1,57 @@
+    <!DOCTYPE html>
+    <html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>로그인 페이지</title>
+    </head>
+    <body>
+        <h1>로그인</h1>
+        <form id="loginForm">
+            <input type="text" name="id" placeholder="아이디" required>
+            <input type="password" name="password" placeholder="비밀번호" required>
+            <button type="submit">로그인</button>
+        </form>
+
+        <div id="result"></div>
+        <button id="signupButton" onclick="window.location.href='signup.html'">회원가입</button>
+
+        
+
+        <script>
+            document.getElementById('loginForm').onsubmit = async (event) => {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const data = new URLSearchParams(formData).toString();
+
+                try {
+                    const response = await fetch('http://localhost:5500/process/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: data
+                    });
+
+                    if (response.ok) {
+                        // 로그인 성공 후, 성공 메시지를 표시하고 로그아웃 버튼 추가
+                        const result = await response.text();
+                        document.getElementById('result').innerHTML = result + `
+                            <button id="logoutButton">로그아웃</button>
+                        `;
+
+                        // 로그아웃 버튼 클릭 시 로그아웃 페이지로 이동
+                        document.getElementById('logoutButton').onclick = () => {
+                            window.location.href = 'logout.html'; // 로그아웃 페이지로 이동
+                        };
+                    } else {
+                        const result = await response.text();
+                        document.getElementById('result').innerHTML = result; // 에러 메시지 표시
+                    }
+                } catch (error) {
+                    console.error('로그인 요청 중 오류 발생:', error);
+                }
+            };
+        </script>
+    </body>
+    </html>
