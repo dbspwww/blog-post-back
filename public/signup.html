@@ -12,6 +12,8 @@
         <div>
             <label for="id">아이디:</label>
             <input type="text" id="id" name="id" required>
+            <button type="button" id="checkIdButton">아이디 중복 확인</button>
+            <div id="idCheckResult"></div> <!-- 결과 메시지를 표시할 부분 -->
         </div>
         <div>
             <label for="name">이름:</label>
@@ -29,6 +31,27 @@
     </form>
     <button onclick="window.location.href='index.html'">로그인</button>
     <script>
+        // 아이디 중복 확인 버튼 클릭 이벤트
+        document.getElementById('checkIdButton').onclick = async () => {
+            const userId = document.getElementById('id').value;
+
+            if (userId) {
+                try {
+                    const response = await fetch(`http://localhost:5500/process/check-id?userId=${userId}`, {
+                        method: 'GET',
+                    });
+
+                    const result = await response.json();
+                    document.getElementById('idCheckResult').innerText = result.message;
+
+                } catch (error) {
+                    console.error('아이디 중복 확인 중 오류 발생:', error);
+                }
+            } else {
+                document.getElementById('idCheckResult').innerText = '아이디를 입력하세요.';
+            }
+        };
+
         document.getElementById('signupForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 기본 제출 동작 방지
 

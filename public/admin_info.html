@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 정보</title>
+</head>
+<body>
+    <h1>관리자 정보</h1>
+    <div id="adminInfo"></div>
+
+    <!-- 회원 수를 표시할 div 추가 -->
+    <div id="userCount" style="margin-top: 20px;">총 회원 수: <span id="count">0</span></div>
+
+    <script>
+        // 관리자 정보를 가져와서 표시
+        fetch('http://localhost:5500/process/admininfo')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('네트워크 응답이 정상적이지 않습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const adminInfoDiv = document.getElementById('adminInfo');
+                data.forEach(admin => {
+                    const adminDate = new Date(admin.admin_date); // UTC 날짜를 변환
+                    const options = { year: 'numeric', month: 'numeric', day: 'numeric' };
+                    const formattedDate = adminDate.toLocaleDateString('ko-KR', options); // 한국 형식으로 변환
+
+                    const p = document.createElement('p');
+                    p.textContent = ` 등록 날짜: ${formattedDate}`;
+                    adminInfoDiv.appendChild(p);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('관리자 정보를 가져오는 중 오류 발생');
+            });
+            // 페이지 로드 시 총 회원 수 요청
+        window.onload = async () => {
+            try {
+                const response = await fetch('http://localhost:5500/process/userCount');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('count').innerText = data.userCount; // 총 회원 수 표시
+                } else {
+                    console.error('회원 수 요청 실패:', await response.text());
+                }
+            } catch (error) {
+                console.error('회원 수 요청 중 오류 발생:', error);
+            }
+        };  
+    </script>
+</body>
+</html>

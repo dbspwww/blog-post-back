@@ -27,7 +27,7 @@
         </div>
         <button type="submit">가입하기</button>
     </form>
-    <button onclick="window.location.href='adminlogin.html'">로그인</button>
+    <button onclick="window.location.href='index.html'">로그인</button>
     <script>
         document.getElementById('signupForm').addEventListener('submit', function(event) {
             event.preventDefault(); // 기본 제출 동작 방지
@@ -54,7 +54,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('회원가입 중 오류 발생');
+                alert('관리자가 존재합니다.');
             });
         });
     </script>
