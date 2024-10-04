@@ -154,10 +154,9 @@ app.post('/process/admin/login', async (req, res) => {
                     req.session.adminName = admin.name; // 관리자 이름 저장
 
                     console.log('관리자 로그인 성공: ' + admin.name);
-                    res.send(`
-                        <h2>로그인 성공</h2>
-                        <p>${admin.name}님, 환영합니다!</p>
-                    `); // 로그인 성공 메시지 반환
+                    res.send(
+                        admin.name
+                    ); // 로그인 성공 메시지 반환
                 } else {
                     console.log('로그인 실패: 비밀번호 불일치');
                     res.status(401).send('<h2>로그인 실패: 비밀번호를 확인하세요</h2>');
