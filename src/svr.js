@@ -22,13 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use('/public', static(path.join(__dirname, 'public')));
 
-// CORS 설정
 const corsOptions = {
-    origin: 'http://localhost:3000', // React 앱의 주소
+    origin: ['http://localhost:3000', 'http://127.0.0.1:5500'], // 허용할 출처를 배열로 나열
     methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true, // 자격 증명 포함
+    credentials: true,
 };
-
 app.use(cors(corsOptions));
 
 // 세션 설정
